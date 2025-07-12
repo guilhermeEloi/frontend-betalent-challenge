@@ -1,69 +1,72 @@
-# React + TypeScript + Vite
+# Projeto de Gestão de Funcionários
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Sobre o projeto
 
-Currently, two official plugins are available:
+Este projeto é uma aplicação web para gerenciar informações de funcionários, permitindo a visualização de uma lista com detalhes como nome, cargo, data de admissão, telefone e foto. A interface é responsiva, adaptando-se para diferentes tamanhos de tela, com uma tabela dinâmica que suporta expansão de linhas para visualizar informações adicionais.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A aplicação utiliza React com TypeScript, Material-UI para componentes visuais, Redux para gerenciamento de estado, e faz requisições a uma API REST para buscar os dados dos funcionários.
 
-## Expanding the ESLint configuration
+O projeto foi criado utilizando [Vite](https://vitejs.dev/), que oferece um ambiente de desenvolvimento rápido e moderno.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Pré-requisitos
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+Antes de começar, certifique-se de ter instalado em sua máquina:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- [Node.js](https://nodejs.org/) (versão 16 ou superior recomendada)
+- [npm](https://www.npmjs.com/) ou [Yarn](https://yarnpkg.com/) para gerenciamento de pacotes
+- Acesso à API backend que fornece os dados dos funcionários (deve estar rodando e acessível)
+
+---
+
+## Instruções para rodar a aplicação
+
+1. **Clone este repositório**
+
+```bash
+git clone https://github.com/seu-usuario/seu-repositorio.git
+cd seu-repositorio
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. **Instale as dependências**
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Usando npm:
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
+
+Ou usando yarn:
+
+```bash
+yarn install
+```
+
+3. **Execute a aplicação em modo de desenvolvimento**
+
+```bash
+npm run dev
+```
+
+Ou com yarn:
+
+```bash
+yarn dev
+```
+
+4. **Abra o navegador**
+
+Acesse [http://localhost:5173](http://localhost:5173) para visualizar a aplicação rodando localmente (porta padrão do Vite).
+
+---
+
+## Tecnologias utilizadas
+
+- React + TypeScript
+- Redux Toolkit
+- Material-UI (MUI)
+- Axios para chamadas HTTP
+- Styled-components para estilos
+- API REST para dados dos funcionários
+- Vite como bundler e ambiente de desenvolvimento
