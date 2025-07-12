@@ -1,7 +1,7 @@
 import { IconButton, InputAdornment, TextField } from "@mui/material";
 import type { InputProps } from "./types";
 
-import searchIcon from "@/assets/SearchIcon.png";
+import SearchIcon from "@mui/icons-material/Search";
 
 const Input = ({
   label,
@@ -37,11 +37,7 @@ const Input = ({
         endAdornment: searchbar ? (
           <InputAdornment position="end">
             <IconButton edge="end" onClick={onSearchClick}>
-              <img
-                src={searchIcon}
-                alt="Ícone de lupa de pesquisa"
-                style={{ width: 24, height: 24 }}
-              />
+              <SearchIcon fontSize="large" style={{ color: "#F0F0F0" }} />
             </IconButton>
           </InputAdornment>
         ) : undefined,

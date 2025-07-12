@@ -17,20 +17,32 @@ export const ContainerPageTitle = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 40px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: start;
+    padding: 0px;
+    margin-top: 40px;
+    margin-left: 30px;
+  }
 `;
 
 export const PageTitle = styled.h1`
-  font-weight: 500;
   font-size: 20px;
   color: #1c1c1c;
+  cursor: default;
 `;
 
 export const ContainerSearchBar = styled.div`
   width: 288px;
+
+  @media (max-width: 600px) {
+    width: 90%;
+  }
 `;
 
 export const ContainerTable = styled.div`
-  width: 95%;
+  width: 90%;
   height: 60vh;
   margin-top: 40px;
 `;

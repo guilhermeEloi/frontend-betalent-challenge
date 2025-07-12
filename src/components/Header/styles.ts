@@ -7,6 +7,7 @@ export const Container = styled.div`
   flex-direction: row;
   align-items: center;
   background-color: #ffffff;
+  box-shadow: 0px 2px 8px 0px #00000033;
 `;
 
 export const LogoContainer = styled.div`

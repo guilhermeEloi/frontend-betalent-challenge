@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
+import type { GridRenderCellParams } from "@mui/x-data-grid";
 
 interface DynamicTableProps {
   columns: GridColDef[];
@@ -12,6 +13,8 @@ interface DynamicTableProps {
   disableColumnSorting?: boolean;
   disableColumnResize?: boolean;
   onRowClick?: (params: any) => void;
+  expandedRowIds?: (string | number)[];
+  renderExpandedRow?: (row: any) => React.ReactNode;
 }
 
 const DynamicTable: React.FC<DynamicTableProps> = ({
@@ -24,14 +27,32 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
   disableColumnSorting = true,
   disableColumnResize = true,
   onRowClick,
+  expandedRowIds = [],
+  renderExpandedRow,
 }) => {
-  const [visibleRowsCount, setVisibleRowsCount] =
-    React.useState(initialRowsCount);
-  const [rows, setRows] = React.useState(allRows.slice(0, initialRowsCount));
+  const [visibleRowsCount, setVisibleRowsCount] = useState(initialRowsCount);
 
-  React.useEffect(() => {
-    setRows(allRows.slice(0, visibleRowsCount));
-  }, [allRows, visibleRowsCount]);
+  const rowsWithExpanded = useMemo(() => {
+    const newRows: any[] = [];
+    const visibleRows = allRows.slice(0, visibleRowsCount);
+
+    visibleRows.forEach((row) => {
+      newRows.push(row);
+      if (expandedRowIds.includes(row.id)) {
+        newRows.push({
+          id: `${row.id}-expanded`,
+          isExpandedRow: true,
+          data: row,
+        });
+      }
+    });
+
+    return newRows;
+  }, [allRows, visibleRowsCount, expandedRowIds]);
+
+  useEffect(() => {
+    setVisibleRowsCount(initialRowsCount);
+  }, [allRows, initialRowsCount]);
 
   const handleRowsScroll = (event: React.UIEvent<HTMLDivElement>) => {
     const target = event.currentTarget;
@@ -44,12 +65,42 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     }
   };
 
+  const columnsWithCustomRender = useMemo(() => {
+    return columns.map((col, index) => ({
+      ...col,
+      renderCell: (params: GridRenderCellParams) => {
+        const row = params.row;
+
+        if (row.isExpandedRow) {
+          if (index === 0) {
+            return (
+              <div
+                style={{
+                  gridColumn: `1 / -1`,
+                  width: "100%",
+                  padding: 20,
+                  backgroundColor: "#FFFFFF",
+                  boxShadow: "0px 1px 2px 0px #00000033",
+                }}
+              >
+                {renderExpandedRow?.(row.data)}
+              </div>
+            );
+          }
+          return null;
+        }
+
+        return col.renderCell ? col.renderCell(params) : params.value ?? null;
+      },
+    }));
+  }, [columns, renderExpandedRow]);
+
   return (
-    <div style={{ height: 600, width: "100%" }} onScroll={handleRowsScroll}>
+    <div onScroll={handleRowsScroll} style={{ width: "100%" }}>
       <DataGrid
-        rows={rows}
-        columns={columns}
-        autoHeight={true}
+        rows={rowsWithExpanded}
+        columns={columnsWithCustomRender}
+        autoHeight
         disableRowSelectionOnClick
         checkboxSelection={checkboxSelection}
         hideFooter
@@ -58,6 +109,13 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
         disableColumnSorting={disableColumnSorting}
         disableColumnResize={disableColumnResize}
         density="standard"
+        getRowHeight={(params) => {
+          if (params.model.isExpandedRow) return "auto";
+          return null;
+        }}
+        getRowClassName={(params) =>
+          params.row.isExpandedRow ? "expanded-row" : ""
+        }
         sx={{
           borderRadius: "8px",
           "& .MuiDataGrid-columnHeader": {
@@ -67,6 +125,20 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
           },
           "& .MuiDataGrid-columnSeparator": {
             display: "none",
+          },
+          "& .MuiDataGrid-cell": {
+            whiteSpace: "normal",
+            lineHeight: "1.5em",
+          },
+          "& .MuiDataGrid-row.expanded-row": {
+            "& .MuiDataGrid-cell": {
+              padding: 0,
+              borderBottom: "none",
+              backgroundColor: "transparent",
+            },
+            "& .MuiDataGrid-cell:not(:first-of-type)": {
+              width: "100%",
+            },
           },
         }}
       />
